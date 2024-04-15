@@ -7,3 +7,7 @@ output "client_credentials" {
     }
   }
 }
+
+output "jwt_configuration" {
+  value = [for client in module.auth0_client : client.jwt_configuration]
+}

@@ -17,10 +17,13 @@ resource "auth0_client" "my_client" {
   grant_types                         = var.grant_types
   client_metadata                     = var.client_metadata
 
-  jwt_configuration {
-    lifetime_in_seconds = var.jwt_configuration.lifetime_in_seconds
-    secret_encoded      = var.jwt_configuration.secret_encoded
-    alg                 = var.jwt_configuration.alg
+  dynamic "jwt_configuration" {
+    for_each = length(compact(values(var.jwt_configuration))) > 0 ? [1] : []
+    content {
+      lifetime_in_seconds = try(var.jwt_configuration.lifetime_in_seconds, 3600)
+      secret_encoded      = try(var.jwt_configuration.secret_encoded, false)
+      alg                 = try(var.jwt_configuration.alg, "RS256")
+    }
   }
 
   refresh_token {

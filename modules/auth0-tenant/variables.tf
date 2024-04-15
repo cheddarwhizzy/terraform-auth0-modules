@@ -100,6 +100,10 @@ variable "session_cookie" {
 variable "universal_login" {
   description = "Configuration settings for Universal Login."
   type = list(object({
+    logo_url = optional(string)
+    universal_login = optional(object({
+      body = string
+    }))
     colors = object({
       primary         = string
       page_background = string

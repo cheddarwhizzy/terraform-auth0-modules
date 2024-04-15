@@ -4,6 +4,12 @@ variable "name" {
   default     = "Example-Connection"
 }
 
+variable "strategy" {
+  description = "Name of the strategy"
+  type        = string
+  default     = "auth0"
+}
+
 # variable "is_domain_connection" {
 #   description = "Indicates whether the connection is domain level."
 #   type        = bool

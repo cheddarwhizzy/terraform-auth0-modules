@@ -101,15 +101,11 @@ variable "client_metadata" {
 variable "jwt_configuration" {
   description = "Configuration settings for the JWTs issued for this client."
   type = object({
-    lifetime_in_seconds = number
-    secret_encoded      = bool
-    alg                 = string
+    lifetime_in_seconds = optional(number)
+    secret_encoded      = optional(bool)
+    alg                 = optional(string)
   })
-  default = ({
-    lifetime_in_seconds = 3600
-    secret_encoded      = false
-    alg                 = "RS256"
-  })
+  default = {}
 }
 
 variable "logo_uri" {

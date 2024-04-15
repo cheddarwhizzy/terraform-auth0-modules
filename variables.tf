@@ -14,6 +14,12 @@ variable "client-secret" {
   description = "Auth0 client secret"
 }
 
+variable "custom_domains" {
+  type        = list(any)
+  description = "Custom domains"
+  default     = []
+}
+
 // Action
 
 variable "actions" {
@@ -61,11 +67,7 @@ variable "clients" {
     token_endpoint_auth_method    = optional(string, "client_secret_post")
     logo_uri                      = optional(string, null)
     sso                           = optional(bool, false)
-    jwt_configuration = optional(any, {
-      alg                 = "RS256"
-      lifetime_in_seconds = "36000"
-      secret_encoded      = "false"
-    })
+    jwt_configuration             = optional(any, {})
     refresh_token = optional(any, {
       expiration_type              = "non-expiring"
       idle_token_lifetime          = "2592000"
@@ -91,7 +93,7 @@ variable "client_grants" {
 variable "apis" {
   type = list(object({
     name                                            = string
-    scopes                                          = list(any)
+    scopes                                          = optional(list(any), [])
     identifier                                      = string
     enforce_policies                                = optional(bool, true)
     signing_alg                                     = optional(string, "RS256")
@@ -193,11 +195,18 @@ variable "prompts" {
   description = "With this resource, you can manage your Auth0 prompts, including choosing the login experience version."
 }
 
+variable "prompt_custom_texts" {
+  type        = any
+  default     = []
+  description = "With this resource, you can manage your Auth0 prompts, including choosing the login experience version."
+}
+
 // Auth0 db
 variable "db_connections" {
   type = list(object({
     name                           = string
     password_policy                = optional(string, "good")
+    strategy                       = optional(string, "auth0")
     password_history               = optional(any, { enable = true, size = 3 })
     password_no_personal_info      = optional(bool, true)
     password_dictionary            = optional(any, { enable = true, dictionary = [] })
@@ -258,4 +267,41 @@ variable "mfa" {
   }))
   default     = []
   description = "Multi-Factor Authentication works by requiring additional factors during the login process to prevent unauthorized access."
+}
+
+// Attack Protection
+variable "attack_protections" {
+  type = map(object({
+    suspicious_ip_throttling = optional(object({
+      enabled   = optional(bool, true)
+      shields   = optional(list(string), [])
+      allowlist = optional(list(string), [])
+      pre_login = optional(object({
+        max_attempts = number
+        rate         = number
+      }))
+      pre_user_registration = optional(object({
+        max_attempts = number
+        rate         = number
+      }))
+    }), null)
+    brute_force_protection = optional(object({
+      enabled      = optional(bool, true)
+      max_attempts = optional(number, 5)
+      mode         = string
+      allowlist    = optional(list(string), [])
+      shields      = optional(list(string), [])
+    }), null)
+    breached_password_detection = optional(object({
+      enabled                      = optional(bool, true)
+      admin_notification_frequency = optional(list(string), [])
+      method                       = optional(string, "standard")
+      shields                      = optional(list(string), [])
+      pre_user_registration = optional(object({
+        shields = optional(list(string), [])
+      }))
+    }), null)
+  }))
+  default     = {}
+  description = "Attack protections"
 }

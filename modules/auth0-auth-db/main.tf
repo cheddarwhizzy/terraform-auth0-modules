@@ -1,6 +1,6 @@
 resource "auth0_connection" "my-database-connection" {
   name     = var.name
-  strategy = "auth0"
+  strategy = var.strategy
   # is_domain_connection = var.is_domain_connection
   # enabled_clients = var.enabled_clients
   options {

@@ -12,6 +12,7 @@ resource "auth0_resource_server" "rs" {
 }
 
 resource "auth0_resource_server_scopes" "my_api_scopes" {
+  count                      = length(var.scopes) > 0 ? 1 : 0
   resource_server_identifier = auth0_resource_server.rs.identifier
 
   dynamic "scopes" {

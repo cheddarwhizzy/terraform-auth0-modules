@@ -70,10 +70,16 @@ resource "auth0_pages" "my_pages" {
 }
 
 resource "auth0_branding" "my_branding" {
-  count = length(var.universal_login) >= 1 ? 1 : 0
+  count    = length(var.universal_login) >= 1 ? 1 : 0
+  logo_url = var.universal_login[0].logo_url
 
   colors {
     primary         = var.universal_login[0].colors.primary
     page_background = var.universal_login[0].colors.page_background
   }
+
+  universal_login {
+    body = var.universal_login[0].universal_login.body
+  }
+
 }

@@ -18,3 +18,11 @@ output "client_secret" {
   value     = data.auth0_client.my_client.client_secret
   sensitive = true
 }
+
+output "key_length" {
+  value = length(keys(var.jwt_configuration))
+}
+
+output "jwt_configuration" {
+  value = compact(distinct(values(var.jwt_configuration)))
+}

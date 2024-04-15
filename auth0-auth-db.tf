@@ -3,6 +3,7 @@ module "auth0-auth-db" {
   for_each = { for v in var.db_connections : v.name => v }
 
   name                           = each.value.name
+  strategy                       = each.value.strategy
   custom_scripts                 = each.value.custom_scripts
   password_policy                = each.value.password_policy
   password_history               = each.value.password_history

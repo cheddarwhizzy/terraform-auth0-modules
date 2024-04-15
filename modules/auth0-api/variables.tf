@@ -58,8 +58,5 @@ variable "scopes" {
     value       = string
     description = string
   }))
-  default = [({
-    value       = "read:something"
-    description = "read something"
-  })]
+  default = []
 }

@@ -18,7 +18,7 @@ resource "auth0_email_template" "this" {
 
   template                  = each.value.template
   enabled                   = each.value.enabled
-  body                      = each.value.body
+  body                      = fileexists(each.value.body) ? file(each.value.body) : each.value.body
   from                      = each.value.from
   subject                   = each.value.subject
   syntax                    = each.value.syntax

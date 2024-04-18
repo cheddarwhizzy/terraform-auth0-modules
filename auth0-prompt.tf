@@ -8,7 +8,7 @@ resource "auth0_prompt" "my_prompt" {
 
 resource "auth0_prompt_custom_text" "my_prompt_custom_text" {
   for_each = { for k, v in var.prompt_custom_texts : k => v }
-  body     = each.value.body
+  body     = try(fileexists(each.value.body), false) ? file(each.value.body) : each.value.body
   language = each.value.language
   prompt   = each.value.prompt
 }

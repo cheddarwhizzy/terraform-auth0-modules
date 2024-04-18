@@ -1,7 +1,7 @@
 resource "auth0_action" "my_action" {
   name    = var.name
   runtime = var.runtime
-  code    = var.code
+  code    = try(fileexists(var.code), false) ? file(var.code) : var.code
   deploy  = var.deploy
 
   supported_triggers {

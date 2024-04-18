@@ -1,3 +1,8 @@
+locals {
+  custom_scripts = { for k, f in var.custom_scripts :
+    k => try(fileexists(f), false) ? file(f) : f
+  }
+}
 resource "auth0_connection" "my-database-connection" {
   name     = var.name
   strategy = var.strategy
@@ -21,7 +26,7 @@ resource "auth0_connection" "my-database-connection" {
       dictionary = var.password_dictionary.dictionary
     }
 
-    custom_scripts                 = var.custom_scripts
+    custom_scripts                 = local.custom_scripts
     enabled_database_customization = var.enabled_database_customization
 
     configuration = var.custom_scripts_configuration
